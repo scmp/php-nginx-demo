@@ -23,7 +23,7 @@ This will only bring up php-fpm benchmark components without monitoring tools.
 
 ### Setup Grafana
 
-- Configure data source for Grafana
+- Configure data source for Grafana  
   `Configuration / Data Sources / Add data source`
 
   - Name: prometheus
@@ -31,7 +31,7 @@ This will only bring up php-fpm benchmark components without monitoring tools.
   - Url: http://prometheus:9090
 
 
-- Import the dashboard using id `10757` 
+- Import the dashboard using id `10757`   
   `Dashboards / Manage / Import`
 
   Reference: https://grafana.com/grafana/dashboards/10757
