@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: php-benchmark-php
+  namespace: default
+  labels:
+    app: php
+  annotations:
+    prometheus.io/scrape: 'true'
+    prometheus.io/port: '9253'
+spec:
+  selector:
+    app: php
+  ports:
+    - protocol: TCP
+      port: 9000

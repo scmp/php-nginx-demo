@@ -1,0 +1,46 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: php-benchmark-nginx-conf
+  namespace: default
+data:
+  nginx.conf: |
+    pid        /tmp/nginx.pid;
+
+    events {
+        worker_connections  1024;
+    }
+
+    http {
+      client_body_temp_path /tmp/client_temp;
+      proxy_temp_path       /tmp/proxy_temp_path;
+      fastcgi_temp_path     /tmp/fastcgi_temp;
+      uwsgi_temp_path       /tmp/uwsgi_temp;
+      scgi_temp_path        /tmp/scgi_temp;
+      proxy_ignore_client_abort on;
+
+      server {
+        listen 8080 default_server;
+        listen [::]:8080 default_server;
+        proxy_ignore_client_abort on;
+        root /var/www/html;
+        server_name _;
+
+        location / {
+          try_files $uri $uri/ =404;
+        }
+
+        location ~ \.php$ {
+          include fastcgi_params;
+          proxy_ignore_client_abort on;
+          fastcgi_buffers 16 32k;
+          fastcgi_buffer_size 32k;
+          fastcgi_intercept_errors on;
+          fastcgi_read_timeout 900;
+          fastcgi_keep_conn on;
+          fastcgi_param REQUEST_METHOD $request_method;
+          fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+          fastcgi_pass php-benchmark-php:9000;
+        }
+      }
+    }

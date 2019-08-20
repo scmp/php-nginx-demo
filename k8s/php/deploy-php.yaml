@@ -1,0 +1,54 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: php-fpm-benchmark-php
+  namespace: default
+  labels:
+    app: php
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: php
+  template:
+    metadata:
+      labels:
+        app: php
+    spec:
+      containers:
+        - name: php
+          lifecycle:
+            postStart:
+              exec:
+                command: ["/bin/sh", "-c", "cp -r /app/. /var/www/html"]
+          image: kyue1005scmp/php-fpm-benchmark-php
+          resources:
+            limits:
+              cpu: 50m
+              memory: 128Mi
+            requests:
+              cpu: 50m
+              memory: 50Mi
+          volumeMounts:
+            - name: php-fpm-conf
+              mountPath: /usr/local/etc/php-fpm.d/www.conf
+              subPath: www.conf
+        - name: php-fpm-exporter
+          image: hipages/php-fpm_exporter
+          env:
+            - name: PHP_FPM_SCRAPE_URI
+              value: tcp://127.0.0.1:9000/status
+          ports:
+            - containerPort: 9253
+          resources:
+            limits:
+              cpu: 30m
+              memory: 32Mi
+            requests:
+              cpu: 10m
+              memory: 10Mi
+      volumes:
+        - name: php-fpm-conf
+          configMap:
+            name: php-benchmark-fpm-conf
+            
