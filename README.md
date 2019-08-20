@@ -1,6 +1,6 @@
 # PHP FPM Benchmark Tools
 
-### Quick Start
+## Quick Start
 
 To quickly deploy all the things, use the following command: 
 
@@ -21,19 +21,7 @@ kubectl apply \
 
 This will only bring up php-fpm benchmark components without monitoring tools.
 
-To remove all components, use the following commands:
-
-```
-kubectl delete \
-  --filename https://raw.githubusercontent.com/scmp/php-nginx-demo/master/k8s/all.yaml
-
-#or
-
-kubectl apply \
-  --filename https://raw.githubusercontent.com/scmp/php-nginx-demo/master/k8s/without-monitoring.yaml
-```
-
-### Setup Grafana
+## Setup Grafana
 
 - Configure data source for Grafana  
   `Configuration / Data Sources / Add data source`
@@ -53,3 +41,17 @@ kubectl apply \
   ```
   kubectl port-forward --namespace monitoring service/grafana 3000:3000
   ```
+
+## Clean up
+
+To remove all components, use the following commands:
+
+```
+kubectl delete \
+  --filename https://raw.githubusercontent.com/scmp/php-nginx-demo/master/k8s/all.yaml
+
+#or
+
+kubectl apply \
+  --filename https://raw.githubusercontent.com/scmp/php-nginx-demo/master/k8s/without-monitoring.yaml
+```
